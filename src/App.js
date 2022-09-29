@@ -1,23 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [newItem, setNewItem] = useState("");
+  const [items, setItems] = useState([]);
+
+  function addItem() {
+    if (!newItem) {
+      alert("Enter an item");
+    } else {
+      const item = {
+        id: Math.floor(Math.random() * 1000),
+        value: newItem,
+      };
+
+      setItems((oldList) => [...oldList, item]);
+
+      setNewItem("");
+
+      console.log(items);
+    }
+  }
+
+  function deleteItem(id) {
+    const newArray = items.filter((item) => item.id !== id);
+    setItems(newArray);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="header">
+        <input
+          type="text"
+          className="input"
+          placeholder="Add text"
+          value={newItem}
+          onChange={(e) => setNewItem(e.target.value)}
+        />
+        <button className="addBtn" onClick={addItem}>
+          Add todo
+        </button>
+      </div>
+      <div className="forTodo">
+        <ul>
+          {items.map((item) => {
+            return (
+              <li key={item.id}>
+                <div>{item.value}</div>
+                <button
+                  className="deleteBtn"
+                  onClick={() => deleteItem(item.id)}
+                >
+                  X
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
